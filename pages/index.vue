@@ -13,9 +13,9 @@
         </div>
         <div class="list" v-if="datas.length !== 0">
           <el-card class="box-card" :class="{'_more': datas.length > 9}">
-            <h2 class="list-title">이름</h2>
-            <div v-for="item in datas" :key="item.index" class="text item">
-              {{ item }}
+            <h2 class="list-title">이름 (총 인원: {{ datas.length }} 명 )</h2>
+            <div v-for="(item, index) in datas" :key="item.index" class="text item">
+              {{ index + 1 }}. {{ item }}
             </div>
             <div style="display: flex; padding-top: 30px;">
               <el-button type="success" icon="el-icon-search" @click="start()" v-loading.fullscreen.lock="fullscreenLoading">추첨하기</el-button>
@@ -45,7 +45,18 @@ export default {
       this.input1 = ''
     },
     reset() {
-      this.datas = []
+      this.$confirm('정말 삭제하시겠습니까?', '알림', {
+          confirmButtonText: '네',
+          cancelButtonText: '아니오',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '삭제 되었습니다.'
+          });
+          this.datas = []
+        }).catch(() => {
+        });
     },
     start() {
       if (this.datas.length === 1) {
@@ -59,7 +70,7 @@ export default {
           this.$alert(this.result, '당첨자!', {
             confirmButtonText: 'OK',
             callback: action => {
-              this.reset()
+              this.datas = []
             }
           });
         }, 5000);
