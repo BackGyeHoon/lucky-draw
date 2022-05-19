@@ -1,4 +1,8 @@
 export default {
+  target: 'static',
+  router: {
+    base: '/lucky-draw/'
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'lucky-draw',
