@@ -67,7 +67,9 @@ export default {
     },
     start() {
       if (this.datas.length === 1) {
-        alert('2명이상 입력해주세요 !')
+        this.$alert('2명이상 입력해주세요 !', '알림', {
+          confirmButtonText: 'OK'
+        });
         return false
       } else {
         this.fullscreenLoading = true;
