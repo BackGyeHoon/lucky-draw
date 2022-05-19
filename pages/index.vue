@@ -41,8 +41,15 @@ export default {
   },
   methods: {
     async invite() {
-      await this.datas.push(this.input1)
-      this.input1 = ''
+      if (this.input1 === '') {
+        this.$alert('이름을 입력해주세요', '알림', {
+          confirmButtonText: 'OK'
+        });
+        return false
+      } else {
+        await this.datas.push(this.input1)
+        this.input1 = ''
+      }
     },
     reset() {
       this.$confirm('정말 삭제하시겠습니까?', '알림', {
