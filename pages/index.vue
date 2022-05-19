@@ -88,7 +88,7 @@ body {
 
 .content {
   position: absolute;
-  width: 500px;
+  width: 400px;
   height: 500px;
   background-color: #fff;
   border-radius: 16px;
