@@ -11,10 +11,10 @@
             v-model="input1" />
           <el-button type="primary" @click="invite()" @keydown.enter="invite()">등록</el-button>
         </div>
-        <div class="list" v-if="datas.length !== 0">
-          <el-card class="box-card" :class="{'_more': datas.length > 7}">
-            <h2 class="list-title">이름 (총 인원: {{ datas.length }} 명 )</h2>
-            <div v-for="(item, index) in datas" :key="item.index" class="text item">
+        <div class="list" v-if="filterDatas.length !== 0">
+          <el-card class="box-card" :class="{'_more': filterDatas.length > 7}">
+            <h2 class="list-title">이름 (총 인원: {{ filterDatas.length }} 명 )</h2>
+            <div v-for="(item, index) in filterDatas" :key="item.index" class="text item">
               {{ index + 1 }}. {{ item }}
             </div>
             <div style="display: flex; padding-top: 30px;">
@@ -38,6 +38,7 @@ export default {
     return {
       input1: '',
       datas: [],
+      filterDatas: [],
       result: '',
       fullscreenLoading: false,
     }
@@ -67,7 +68,9 @@ export default {
         });
         return false
       } else {
-        await this.datas.push(this.input1)
+        await this.datas.push(this.input1);
+        const array = this.datas;
+        this.filterDatas = [...new Set(array)];
         this.input1 = ''
       }
     },
@@ -82,6 +85,7 @@ export default {
             message: '삭제 되었습니다.'
           });
           this.datas = []
+          this.filterDatas = []
         }).catch(() => {
         });
     },
@@ -94,15 +98,15 @@ export default {
       } else {
         this.fullscreenLoading = true;
         setTimeout(() => {
-          this.result = this.datas[Math.floor(Math.random() * this.datas.length)]
+          this.result = this.filterDatas[Math.floor(Math.random() * this.filterDatas.length)]
           this.fullscreenLoading = false;
           this.$alert(this.result, '당첨자!', {
             confirmButtonText: 'OK',
             callback: action => {
-              this.datas = []
+              
             }
           });
-        }, 5000);
+        }, 1000);
       }
     }
   }
