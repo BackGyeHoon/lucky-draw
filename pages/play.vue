@@ -145,7 +145,11 @@ h2 {
 }
 
 body {
-  background-color: #e6e6e6;
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }
 
 .container {
@@ -165,6 +169,7 @@ body {
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
+  box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.05);
 }
 
 .header {
@@ -228,6 +233,8 @@ body {
 
 .el-button--danger {
   width: 100%;
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
 }
 
 /* ===== Scrollbar CSS ===== */

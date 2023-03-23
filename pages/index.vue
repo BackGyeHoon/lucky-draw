@@ -6,10 +6,10 @@
       </header>
       <div class="body">
         <div class="search">
-          <el-input
-            placeholder="제목 입력"
-            v-model="input1" />
-          <el-button type="primary" @click="invite()" @keydown.enter="invite()">입력!</el-button>
+          <el-input placeholder="제목 입력" v-model="input1" />
+          <el-button type="primary" @click="invite()" @keydown.enter="invite()"
+            >입력!</el-button
+          >
         </div>
       </div>
     </div>
@@ -18,27 +18,27 @@
 
 <script>
 export default {
-  name: 'IndexPage',
+  name: "IndexPage",
   data() {
     return {
-      input1: '',
-      result: '',
+      input1: "",
+      result: "",
       fullscreenLoading: false,
-    }
+    };
   },
   methods: {
     async invite() {
-      if (this.input1 === '') {
-        this.$alert('이름을 입력해주세요', '알림', {
-          confirmButtonText: 'OK'
+      if (this.input1 === "") {
+        this.$alert("이름을 입력해주세요", "알림", {
+          confirmButtonText: "OK",
         });
-        return false
+        return false;
       } else {
-        await this.$router.push(`/play?title=${this.input1}`)
+        await this.$router.push(`/play?title=${this.input1}`);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style>
 body,
@@ -49,7 +49,11 @@ h2 {
 }
 
 body {
-  background-color: #e6e6e6;
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }
 
 .container {
@@ -68,6 +72,7 @@ body {
   left: 50%;
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
+  box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.05);
 }
 
 .header {
@@ -89,13 +94,13 @@ body {
 }
 
 .el-input__inner {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .el-button--primary {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .list-title {
@@ -122,5 +127,4 @@ body {
   max-height: 300px;
   overflow-y: scroll;
 }
-
 </style>
