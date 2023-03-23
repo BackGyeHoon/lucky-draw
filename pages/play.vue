@@ -3,10 +3,28 @@
     <div class="content">
       <header class="header">
         <h2 class="header-title">{{ getTitle }}</h2>
+        <p class="draw-title" v-if="drawItem">
+          상품 : <span class="bold">{{ drawItem }}</span>
+        </p>
       </header>
       <div class="body2">
+        <div class="search2">
+          <el-input
+            placeholder="드로우 품목을 입력해주세요 !"
+            v-model="input2"
+          />
+          <el-button
+            type="primary"
+            @click="addItem()"
+            @keydown.enter="addItem()"
+            >등록</el-button
+          >
+        </div>
         <div class="search">
-          <el-input placeholder="이름 입력" v-model="input1" />
+          <el-input
+            placeholder="참여자 이름을 입력해주세요 !"
+            v-model="input1"
+          />
           <el-button type="primary" @click="invite()" @keydown.enter="invite()"
             >등록</el-button
           >
@@ -26,7 +44,7 @@
             <div style="display: flex; padding-top: 30px">
               <el-button
                 type="success"
-                icon="el-icon-search"
+                icon="el-icon-switch-button"
                 @click="start()"
                 v-loading.fullscreen.lock="fullscreenLoading"
                 >추첨하기</el-button
@@ -37,6 +55,13 @@
                 @click="reset()"
               ></el-button>
             </div>
+            <el-button
+              type="info"
+              class="lucky-button"
+              icon="el-icon-search"
+              @click="openLuckyModal()"
+              >당첨자 리스트</el-button
+            >
           </el-card>
         </div>
       </div>
@@ -50,6 +75,31 @@
         >
       </div>
     </div>
+    <div class="modal" v-if="isLuckyListDialog">
+      <div class="dim"></div>
+      <div class="modal-content">
+        <ul class="list">
+          <li class="lucky-item lucky-item-first">
+            <h2 class="item-title">당첨자</h2>
+            <p class="item-value">당첨품목</p>
+          </li>
+          <li
+            class="lucky-item"
+            v-for="(item, index) in luckys"
+            :key="item.index"
+          >
+            <h2 class="item-title">{{ item.value }}</h2>
+            <p class="item-value">{{ item.title }}</p>
+          </li>
+        </ul>
+        <el-button
+          type="success"
+          class="lucky-button"
+          @click="closeLuckyModal()"
+          >확인</el-button
+        >
+      </div>
+    </div>
   </section>
 </template>
 
@@ -58,10 +108,14 @@ export default {
   name: "PlayPage",
   data() {
     return {
+      isLuckyListDialog: false,
       input1: "",
+      input2: "",
       datas: [],
+      drawItem: "",
       filterDatas: [],
       result: "",
+      luckys: [],
       fullscreenLoading: false,
     };
   },
@@ -82,6 +136,15 @@ export default {
     backPage() {
       this.$router.push("/");
       localStorage.clear();
+    },
+    addItem() {
+      this.drawItem = this.input2;
+    },
+    openLuckyModal() {
+      this.isLuckyListDialog = true;
+    },
+    closeLuckyModal() {
+      this.isLuckyListDialog = false;
     },
     async invite() {
       if (this.input1 === "") {
@@ -130,6 +193,10 @@ export default {
             confirmButtonText: "OK",
             callback: (action) => {},
           });
+          this.luckys.push({
+            title: this.drawItem,
+            value: this.result,
+          });
         }, 1000);
       }
     },
@@ -150,6 +217,68 @@ body {
     rgba(238, 174, 202, 1) 0%,
     rgba(148, 187, 233, 1) 100%
   );
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dim {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+  position: absolute;
+  width: 400px;
+  height: auto;
+  min-height: 200px;
+  background-color: #fff;
+  border-radius: 16px;
+  margin: 0 auto;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  box-shadow: 0px 4px 9px rgba(0, 0, 0, 0.05);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 350px;
+  overflow: scroll;
+}
+
+.lucky-item {
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.lucky-item-first {
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.item-title {
+  width: 50%;
+  text-align: center;
+  font-size: 18px;
+  border-right: 1px solid #d9d9d9;
+}
+
+.item-value {
+  width: 50%;
+  text-align: center;
+  font-size: 18px;
 }
 
 .container {
@@ -188,6 +317,11 @@ body {
 
 .search {
   display: flex;
+}
+
+.search2 {
+  display: flex;
+  padding-bottom: 10px;
 }
 
 .el-input__inner {
@@ -235,6 +369,20 @@ body {
   width: 100%;
   border-top-left-radius: 0 !important;
   border-top-right-radius: 0 !important;
+}
+
+.draw-title {
+  margin: 0;
+  padding-bottom: 10px;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.lucky-button {
+  width: 100%;
+  margin-top: 10px;
 }
 
 /* ===== Scrollbar CSS ===== */
